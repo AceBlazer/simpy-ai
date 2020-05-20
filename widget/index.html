@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Simpy</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.css">
+    <link rel="stylesheet" href="css/drag.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Simpy</h1>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-target="#uploadModal" data-toggle="modal" title="Simpy">
+            <i class="fa fa-camera" aria-hidden="true"></i>
+        </button>
+
+
+
+
+
+
+        <!-- upload Modal -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+            aria-hidden="true" data-backdrop="false" style="width: 50%;transform: translate(50%, 10%);">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Upload</h5>
+                        help
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+
+                        <div id="drop-region" style="width: 100%;">
+                            <div class="drop-message">
+                                Drag & Drop images or click to upload
+                            </div>
+                            <div id="image-preview"></div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success"
+                            onclick="$('#uploadModal').modal('hide');$('#modal').modal('show');">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <!-- crop Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true"
+            style="overflow-y: auto;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Cropper</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="img-container">
+                            <img id="image" src="https://tu-sofia.bg/videoLabsEn/imageVideo/no-image.png" alt="Picture">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <button id="indexButton" type="button" class="btn btn-primary" onClick="indexNow()">
+            Index now
+        </button>
+        <div id="spinnerContainer" style="position: absolute;display: inline;margin: 30px;">
+        </div>
+
+
+        <div>
+            <h1>TODO:</h1>
+            add to heroku
+            gest erreurs + empty resp
+            not same res w/ diff upload methods of same picture
+            drag n drop directly into button
+            help
+            enable cron (30 sec counter)
+            disable cron
+            search result (azure blob / imgname )
+            customer name project name (db)
+            vp trees
+        </div>
+
+
+
+        <h3>Our prducts</h3>
+        <img src="https://cdn.shopify.com/s/files/1/0707/2435/products/MG_9610_768x.jpg" height="100px" width="120px"> <br>
+        <img src="https://media.bergdorfgoodman.com/image/upload/b_rgb:e9eaeb/f_auto,q_auto:low,ar_5:7,c_fill,dpr_2.0,w_720/01/2767765_m" height="100px" width="120px"> <br>
+        <img src="https://cdn.shopify.com/s/files/1/3000/0340/products/frontfull_c2b710ab-3a2e-4b6c-ba4b-a49790768deb_1200x.jpg?v=1576669887" height="100px" width="120px"> <br>
+
+        <!--Result modal-->
+        <div class="modal fade" id="modalRes" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Result</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="resContainer" class="img-container"
+                            style="height: 500px; overflow-y: scroll;text-align: center;">
+                            <!--res iages goes here-->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.js"></script>
+
+    <script type="text/javascript" src="js/main.js"></script>
+
+    <script type="text/javascript" src="js/index.js"></script>
+
+    <script type="text/javascript" src="js/drag.js"></script>
+
+    <script type="text/javascript" src="js/loading-spinner.js"></script>
+
+</body>
+
+</html>
