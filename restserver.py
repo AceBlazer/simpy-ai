@@ -56,5 +56,6 @@ def search():
                 return {"similars": similars}
         except Exception as e:
              print(str(e))
+             return Response("{'error':'Please check the image you sent.'}", status=500, mimetype='application/json')
     else:
         return Response("{'error':'Please check the image you sent.'}", status=500, mimetype='application/json')

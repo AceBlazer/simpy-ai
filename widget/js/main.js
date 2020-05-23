@@ -61,23 +61,54 @@ window.addEventListener('DOMContentLoaded', function () {
                 $('#resContainer').empty();
                 console.log(data.similars)
                 $('#modalRes').modal('show');
-                for (let i in data.similars) {
-                    console.log(data.similars[i].image)
-                    var img = $('<img id="$' + i.toString() + '">');
-                    img.css("height", "200px");
-                    img.css("width", "auto");
-                    img.css("margin", "10px");
-                    img.css("cursor", "pointer");
-                    img.css("border-radius", "2px");
-                    img.attr('src', "../" + data.similars[i].image.toString());
+                if (data.similars.length > 0) {
+                    //similars found
+                    for (let i in data.similars) {
+                        console.log(data.similars[i].image)
+                        var img = $('<img id="$' + i.toString() + '">');
+                        img.css("height", "200px");
+                        img.css("width", "auto");
+                        img.css("margin", "10px");
+                        img.css("cursor", "pointer");
+                        img.css("border-radius", "2px");
+                        img.attr('src', "../" + data.similars[i].image.toString());
+                        img.appendTo('#resContainer');
+                    }
+                } else {
+                    //no similars found
+                    var img = $('<img src="./img/notfound.png" width="200px">');
+                    var label = $('<label> Sorry, no similars found ! </label>');
+                    label.css("display", "block");
                     img.appendTo('#resContainer');
+                    label.appendTo('#resContainer');
                 }
                 global = null;
             },
             error: function () {
-                alert("error");
+                $('#resContainer').empty();
+                $('#modalRes').modal('show');
+                //var img = new Image();
+                var img = $('<img src="./img/error.png" width="200px">');
+                var label = $('<label> Sorry, something went wrong ! </label>');
+                label.css("display", "block");
+                img.appendTo('#resContainer');
+                label.appendTo('#resContainer');
+                global = null;
             }
         });
         global.destroy();
-    });;
+    });
+
+
 });
+
+
+
+
+function help() {
+    console.log("helppppp")
+    var p1 = $("<p> This is a widget that can be added to any e-commerce website to help merchants by providing \"similar images search of a product\" to their customers in order to increase sales and store efficiency. </p>")
+    var p2 = $("<p> It is all designed and developed by Jasser Saanoun (saanoun.jasser21@gmail.com). </p>")
+    p1.insertBefore('#drop-region')
+    p2.insertBefore('#drop-region')
+}
