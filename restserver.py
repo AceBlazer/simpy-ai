@@ -12,10 +12,12 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
 import os
+import database.database as db
 
 
 app = Flask(__name__)
 CORS(app)
+db.connect()
 
 
 @app.route('/index', methods=['POST'])
