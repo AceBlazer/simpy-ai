@@ -11,14 +11,138 @@ import requests
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
-import os
 import database.database as db
+from bson.objectid import ObjectId
+from flask_bcrypt import Bcrypt
+import json
+from bson.json_util import dumps
 
 
 app = Flask(__name__)
 CORS(app)
+bcrypt = Bcrypt(app)
 db.connect()
 
+
+
+
+
+'''
+******************************************************************
+*************  Routes interacting with db (mostly for the website)
+******************************************************************
+'''
+#get cust by id or del customer by id
+@app.route('/customer', methods=['GET', 'DELETE'])
+def customer():
+    try: 
+        customer = request.args['id']
+        if request.method == 'GET':
+            x = db.findCustomerById(ObjectId(customer))
+            if x:
+                return dumps(x)
+            else:
+                return Response("{'error':'Customer not found.'}", status=500, mimetype='application/json')
+        else:
+            x = db.deleteCustomerById(ObjectId(customer))
+            if x:
+                return Response("customer successfully deleted.", status=200, mimetype='application/json')
+            else:
+                return Response("{'error':'Customer not deleted.'}", status=500, mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response("{'error':'Error occured when adding/deleting customer.'}", status=500, mimetype='application/json')
+
+#TODO
+#get project, add project, delete project
+@app.route('/project', methods=['GET', 'DELETE'])
+def project():
+    try: 
+        project = request.args['project']
+        if request.method == 'POST':
+            db.add("projects", project)
+            return Response("project successfully added.", status=201, mimetype='application/json')
+        else:
+            db.delete("projects", project)
+            return Response("project successfully deleted.", status=200, mimetype='application/json')
+    except:
+        Response("{'error':'Error occured when adding/deleting project.'}", status=500, mimetype='application/json')
+
+#TODO
+#get projects of customer ID
+@app.route('/projects', methods=['GET'])
+def projects():
+    try: 
+        customer_name = request.args['customer_name']
+        projects = db.findProjectsOfCustomer(customer_name)
+        return json.dumps(projects)
+    except:
+        Response("{'error':'Error occured when getting project.'}", status=500, mimetype='application/json')
+
+@app.route('/register', methods=['POST'])
+def register():
+    try: 
+        address_info = {
+            "country": request.json["country"],
+            "state": request.json["state"],
+            "city": request.json["city"],
+            "street": request.json["street"],
+            "zipCode": int(request.json["zipCode"])
+        }
+        xaddress = db.add("addresses", address_info)
+        
+        company_info = {
+            "name": request.json["name"],
+            "address": ObjectId(str(xaddress.inserted_id)),
+            "sector": request.json["sector"],
+            "specialty": request.json["specialty"],
+            "tel": request.json["tel"],
+            "fiscalID": request.json["fiscalID"]
+        }
+        xcompany = db.add("companies", company_info)
+
+
+        customer_info = {
+            "firstName": request.json["firstName"],
+            "lastName": request.json["lastName"],
+            "email": request.json["email"],
+            "password": str(bcrypt.generate_password_hash(request.json["password"], 10).decode("utf-8")),
+            "function": request.json["function"],
+            "company": ObjectId(str(xcompany.inserted_id)),
+            "projects": []
+        }
+        xcustomer = db.add("customers", customer_info)
+  
+        if xcustomer: 
+            return Response("customer successfully added.", status=200, mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response("{'error':'Error occured when registering customer.'}", status=500, mimetype='application/json')
+        
+
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        email = request.json["email"]
+        password = request.json["password"]
+        x = db.findCustomerByEmail(email)
+        if x:
+            if bcrypt.check_password_hash(x["password"], password):
+                return dumps(x)
+            else:
+                return Response("{'error':'Wrong credentials.'}", status=500, mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response("{'error':'Error occured when finding customer.'}", status=500, mimetype='application/json')
+
+
+
+
+'''
+*****************************************
+*************  Routes interacting with AI
+*****************************************
+'''
 
 @app.route('/index', methods=['POST'])
 def index():
@@ -75,6 +199,17 @@ def search():
 
 
 
+
+
+
+
+
+'''
+***************************************************
+*************  Routes interacting with Email module
+***************************************************
+'''
+
 def sendEmail(reciever):
     try:
         print(os.environ['GMPW'])
@@ -117,6 +252,21 @@ def sendErrorEmail(reciever):
         server.quit()
     except Exception as e:
         print(e)
+
+
+
+
+
+
+
+
+
+'''
+*******************************************
+*************  Routes interacting with CRON
+*******************************************
+'''
+
 
 '''
 #to leave untill later time bc crons/schedules are hard in windows
