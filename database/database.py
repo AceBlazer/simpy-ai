@@ -61,17 +61,17 @@ def deleteCustomerById(id):
     collection = db["customers"]
     return collection.delete_one({"_id": id})
 
-def findProjectsOfCustomer(customer_name):
+def findProjectsOfCustomer(customerId):
     #no populate in pymongo :(
     try:
         projects = []
-        customer = findCustomerByName(customer_name)
-        customerId = customer._id
-        collection = db["customers"]
-        for pid in customer.items()["projects"]:
-            projects.append(db["projects"].find_one({"_id": str(pid)}))
-        return projects
+        customer = findCustomerById(customerId)
+
+        for pid in customer["projects"]:
+            projects.append(db["projects"].find_one({"_id": pid}))
+        return projects 
     except Exception as e:
         print(e)
+        return None
 
 

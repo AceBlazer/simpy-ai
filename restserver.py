@@ -54,8 +54,8 @@ def customer():
         return Response("{'error':'Error occured when adding/deleting customer.'}", status=500, mimetype='application/json')
 
 #TODO
-#get project, add project, delete project
-@app.route('/project', methods=['GET', 'DELETE'])
+#get project, add project to customerId, delete project
+@app.route('/project', methods=['GET', 'POST', 'DELETE'])
 def project():
     try: 
         project = request.args['project']
@@ -68,16 +68,24 @@ def project():
     except:
         Response("{'error':'Error occured when adding/deleting project.'}", status=500, mimetype='application/json')
 
-#TODO
+
 #get projects of customer ID
 @app.route('/projects', methods=['GET'])
 def projects():
     try: 
-        customer_name = request.args['customer_name']
-        projects = db.findProjectsOfCustomer(customer_name)
-        return json.dumps(projects)
-    except:
-        Response("{'error':'Error occured when getting project.'}", status=500, mimetype='application/json')
+        customerId = request.args['id']
+        projects = db.findProjectsOfCustomer(ObjectId(customerId))
+        if len(projects)>0:
+            resp = []
+            for project in projects:
+                resp.append(project)
+            print(resp)
+            return dumps(resp)
+        else:
+            return Response("{'error':'No projects found.'}", status=500, mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response("{'error':'Error occured when getting project.'}", status=500, mimetype='application/json')
 
 @app.route('/register', methods=['POST'])
 def register():
