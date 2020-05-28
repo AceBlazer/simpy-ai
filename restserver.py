@@ -32,6 +32,23 @@ db.connect()
 *************  Routes interacting with db (mostly for the website)
 ******************************************************************
 '''
+
+#get customer name, project name (later api key), given the shop url, to the frontend to  be able to call us
+@app.route('/shop-info', methods=['GET'])
+def shopInfo():
+    try:
+        url = request.args['url']
+        p = db.findProjectByUrl(url)
+        c = db.findCustomerByProject(p["_id"])
+        resp = {
+            "customer_name": c["company"],
+            "project_name": p["name"]
+        }
+        return resp
+    except Exception as e:
+        print(e)
+        return Response("{'error':'Error occured when getting shop info.'}", status=500, mimetype='application/json')
+
 #get cust by id or del customer by id
 @app.route('/customer', methods=['GET', 'DELETE'])
 def customer():
@@ -67,7 +84,8 @@ def project():
                 return Response("{'error':'Project not found.'}", status=500, mimetype='application/json')
         elif request.method == 'POST':
             project_info = {
-                "name": request.json["name"]
+                "name": request.json["name"],
+                "url": request.json["url"]
             }
             xproject = db.add("projects", project_info)
             print(type(xproject.inserted_id))
@@ -127,6 +145,7 @@ def register():
             "password": str(bcrypt.generate_password_hash(request.json["password"], 10).decode("utf-8")),
             "function": request.json["function"],
             "company": request.json["name"],
+            "url": request.json["url"],
             "address": ObjectId(str(xaddress.inserted_id)),
             "sector": request.json["sector"],
             "specialty": request.json["specialty"],

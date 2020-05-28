@@ -1,4 +1,11 @@
 window.addEventListener('DOMContentLoaded', function () {
+
+
+    //load shop infos (custoer name, project name) to send later in requests
+    
+
+
+
     var global;
     var image = document.querySelector('#image');
     var result = document.querySelector('#result');

@@ -74,11 +74,24 @@ def findProjectsOfCustomer(customerId):
         print(e)
         return None
 
+def findCustomerByProject(pid):
+    try:
+        collection = db["customers"]
+        x = collection.find_one({"projects": pid});
+        return x
+    except Exception as e:
+        print(e)
+        return None
+
 
 
 def findProjectById(id):
     collection = db["projects"]
     return collection.find_one({"_id": id})
+
+def findProjectByUrl(url):
+    collection = db["projects"]
+    return collection.find_one({"url": url})
 
 def deleteProjectById(id):
     collection = db["projects"]
