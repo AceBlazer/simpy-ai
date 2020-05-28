@@ -120,24 +120,17 @@ def register():
         }
         xaddress = db.add("addresses", address_info)
         
-        company_info = {
-            "name": request.json["name"],
-            "address": ObjectId(str(xaddress.inserted_id)),
-            "sector": request.json["sector"],
-            "specialty": request.json["specialty"],
-            "tel": request.json["tel"],
-            "fiscalID": request.json["fiscalID"]
-        }
-        xcompany = db.add("companies", company_info)
-
-
         customer_info = {
             "firstName": request.json["firstName"],
             "lastName": request.json["lastName"],
             "email": request.json["email"],
             "password": str(bcrypt.generate_password_hash(request.json["password"], 10).decode("utf-8")),
             "function": request.json["function"],
-            "company": ObjectId(str(xcompany.inserted_id)),
+            "company": request.json["name"],
+            "address": ObjectId(str(xaddress.inserted_id)),
+            "sector": request.json["sector"],
+            "specialty": request.json["specialty"],
+            "tel": request.json["tel"],
             "projects": []
         }
         xcustomer = db.add("customers", customer_info)
@@ -176,8 +169,8 @@ def login():
 @app.route('/index', methods=['POST'])
 def index():
     try:
-        pathIndex = os.path.join("indexes", "project_name")
-        pathIndex = os.path.join(pathIndex, "customer_name")
+        pathIndex = os.path.join("indexes", request.json["project_name"])
+        pathIndex = os.path.join(pathIndex, request.json["customer_name"])
         pathIndex = os.path.join(pathIndex, "index.csv")
         reciever = "saanoun.jasser21@gmail.com"
         if not os.path.exists(os.path.dirname(pathIndex)):
@@ -202,8 +195,8 @@ def search():
             base64_img_bytes = base64_img.encode('utf-8')
             currentDT = datetime.datetime.now().isoformat()
             imgname = str(currentDT).replace(":","-").replace(".","_")+".jpg"
-            path = os.path.join("queries", "project_name")
-            path = os.path.join(path, "customer_name")
+            path = os.path.join("queries", request.json["project_name"])
+            path = os.path.join(path, request.json["customer_name"])
             path = os.path.join(path, imgname)
             if not os.path.exists(os.path.dirname(path)):
                 try:
@@ -214,8 +207,8 @@ def search():
             with open(path, 'wb') as file_to_save:
                 decoded_image_data = base64.decodebytes(base64_img_bytes)
                 file_to_save.write(decoded_image_data)
-                pathIndex = os.path.join("indexes", "project_name")
-                pathIndex = os.path.join(pathIndex, "customer_name")
+                pathIndex = os.path.join("indexes", request.json["project_name"])
+                pathIndex = os.path.join(pathIndex, request.json["customer_name"])
                 pathIndex = os.path.join(pathIndex, "index.csv")
                 similars = run(path, pathIndex)
                 return {"similars": similars}
