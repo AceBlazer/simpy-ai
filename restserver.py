@@ -53,20 +53,41 @@ def customer():
         print(e)
         return Response("{'error':'Error occured when adding/deleting customer.'}", status=500, mimetype='application/json')
 
-#TODO
+
 #get project, add project to customerId, delete project
 @app.route('/project', methods=['GET', 'POST', 'DELETE'])
 def project():
     try: 
-        project = request.args['project']
-        if request.method == 'POST':
-            db.add("projects", project)
-            return Response("project successfully added.", status=201, mimetype='application/json')
+        if request.method == 'GET':
+            projectId = request.args['id']
+            x = db.findProjectById(projectId)
+            if x:
+                return dumps(x)
+            else:
+                return Response("{'error':'Project not found.'}", status=500, mimetype='application/json')
+        elif request.method == 'POST':
+            project_info = {
+                "name": request.json["name"]
+            }
+            xproject = db.add("projects", project_info)
+            print(type(xproject.inserted_id))
+            x = db.addProjectToCustomer(ObjectId(request.json["customerId"]), xproject.inserted_id)
+            if x:
+                return Response("project successfully added.", status=200, mimetype='application/json')
+            else:
+                return Response("{'error':'Project not added.'}", status=500, mimetype='application/json')
+
         else:
-            db.delete("projects", project)
-            return Response("project successfully deleted.", status=200, mimetype='application/json')
-    except:
-        Response("{'error':'Error occured when adding/deleting project.'}", status=500, mimetype='application/json')
+            #todo: update all customers projects field if its not automatically done by pymongo
+            projectId = request.args['id']
+            x = db.deleteProjectById(ObjectId(projectId))
+            if x:
+                return Response("project successfully deleted.", status=200, mimetype='application/json')
+            else:
+                return Response("{'error':'Project not deleted.'}", status=500, mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response("{'error':'Error occured when adding/deleting project.'}", status=500, mimetype='application/json')
 
 
 #get projects of customer ID

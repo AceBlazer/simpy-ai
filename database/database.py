@@ -75,3 +75,18 @@ def findProjectsOfCustomer(customerId):
         return None
 
 
+
+def findProjectById(id):
+    collection = db["projects"]
+    return collection.find_one({"_id": id})
+
+def deleteProjectById(id):
+    collection = db["projects"]
+    return collection.delete_one({"_id": id})
+
+def addProjectToCustomer(customerId, projectId):
+    try:
+        return db["customers"].find_one_and_update({'_id': customerId}, {'$push': {'projects': projectId}})
+    except Exception as e:
+        print(e)
+        return None
