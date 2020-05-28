@@ -42,7 +42,8 @@ def shopInfo():
         c = db.findCustomerByProject(p["_id"])
         resp = {
             "customer_name": c["company"],
-            "project_name": p["name"]
+            "project_name": p["name"],
+            "email": c["email"]
         }
         return resp
     except Exception as e:
@@ -191,7 +192,7 @@ def index():
         pathIndex = os.path.join("indexes", request.json["project_name"])
         pathIndex = os.path.join(pathIndex, request.json["customer_name"])
         pathIndex = os.path.join(pathIndex, "index.csv")
-        reciever = "saanoun.jasser21@gmail.com"
+        reciever = request.json["email"]
         if not os.path.exists(os.path.dirname(pathIndex)):
                 try:
                     os.makedirs(os.path.dirname(pathIndex))
@@ -200,10 +201,12 @@ def index():
                         raise
         indexNow("dataset", pathIndex)
         sendEmail(reciever)
-        return ("Images indexed successfully.")
-    except:
+        #return ("Images indexed successfully.")
+        return Response("Images indexed successfully.", status=200, mimetype='application/javascript')
+    except Exception as e:
+        print(e)
         sendErrorEmail(reciever)
-        return Response("{'error':'Error occured when indexing your images.'}", status=500, mimetype='application/json')
+        return Response("{'error':'Error occured when indexing your images.'}", status=500, mimetype='application/javascript')
 
 
 @app.route('/search', methods=['POST'])
@@ -253,7 +256,6 @@ def search():
 
 def sendEmail(reciever):
     try:
-        print(os.environ['GMPW'])
         msg = MIMEMultipart()
         msg['from'] = "customer.simpy@gmail.com"
         msg['to'] = str(reciever)
@@ -261,7 +263,6 @@ def sendEmail(reciever):
         msg['subject'] = "Indexing complete"
         body = "<p>The image indexing from the project: xxx is completed successfully.</p>"
         msg.attach(MIMEText(body, "html"))
-        print(msg)
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.ehlo()
         server.starttls()

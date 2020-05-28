@@ -1,8 +1,30 @@
 window.addEventListener('DOMContentLoaded', function () {
 
+    var customer_name = "";
+    var project_name = "";
+    var window_url = "";
 
     //load shop infos (custoer name, project name) to send later in requests
+    if (window.location.href.indexOf("C:/")>=0) {
+        window_url = "https://www.go-jasser.com/index.php?fcbid=1f2f5f4s4gd4fg4d6fg4f4dg5d3g4d3f5g4d435g4d3g45/"
+    } else {
+        window_url = window.location.href
+    }
     
+    $.ajax({
+        url: "http://localhost:5000/shop-info",
+        type: "GET",
+        data: { url: window_url },
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            customer_name = data["customer_name"];
+            project_name = data["project_name"];
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    });
 
 
 
@@ -61,7 +83,7 @@ window.addEventListener('DOMContentLoaded', function () {
         $.ajax({
             url: "http://localhost:5000/search",
             type: "POST",
-            data: JSON.stringify({ image: global.getCroppedCanvas().toDataURL('image/jpeg') }),
+            data: JSON.stringify({ image: global.getCroppedCanvas().toDataURL('image/jpeg'), customer_name: customer_name, project_name: project_name }),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
