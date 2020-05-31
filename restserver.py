@@ -39,13 +39,16 @@ def shopInfo():
     try:
         url = request.args['url']
         p = db.findProjectByUrl(url)
-        c = db.findCustomerByProject(p["_id"])
-        resp = {
-            "customer_name": c["company"],
-            "project_name": p["name"],
-            "email": c["email"]
-        }
-        return resp
+        if p:
+            c = db.findCustomerByProject(p["_id"])
+            resp = {
+                "customer_name": c["company"],
+                "project_name": p["name"],
+                "email": c["email"]
+            }
+            return resp
+        else:
+            return Response("{'error':'Cannot find a project with this URL.'}", status=500, mimetype='application/json')
     except Exception as e:
         print(e)
         return Response("{'error':'Error occured when getting shop info.'}", status=500, mimetype='application/json')
@@ -200,12 +203,12 @@ def index():
                     if exc.errno != errno.EEXIST:
                         raise
         indexNow("dataset", pathIndex)
-        sendEmail(reciever)
+        sendEmail(reciever, request.json["project_name"])
         #return ("Images indexed successfully.")
         return Response("Images indexed successfully.", status=200, mimetype='application/javascript')
     except Exception as e:
         print(e)
-        sendErrorEmail(reciever)
+        sendErrorEmail(reciever, request.json["project_name"])
         return Response("{'error':'Error occured when indexing your images.'}", status=500, mimetype='application/javascript')
 
 
@@ -254,14 +257,14 @@ def search():
 ***************************************************
 '''
 
-def sendEmail(reciever):
+def sendEmail(reciever, project_name):
     try:
         msg = MIMEMultipart()
         msg['from'] = "customer.simpy@gmail.com"
         msg['to'] = str(reciever)
         password = os.environ['GMPW']
         msg['subject'] = "Indexing complete"
-        body = "<p>The image indexing from the project: xxx is completed successfully.</p>"
+        body = "<p>The image indexing from the project: "+project_name+" is completed successfully.</p>"
         msg.attach(MIMEText(body, "html"))
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.ehlo()
@@ -274,7 +277,7 @@ def sendEmail(reciever):
         print(e)
 
 
-def sendErrorEmail(reciever):
+def sendErrorEmail(reciever, project_name):
     try:
         print(os.environ['GMPW'])
         msg = MIMEMultipart()
@@ -282,7 +285,7 @@ def sendErrorEmail(reciever):
         msg['to'] = str(reciever)
         password = os.environ['GMPW']
         msg['subject'] = "Indexing problem"
-        body = "<p>It appears to be that the image indexing for the project: xxx got an error and has not completed.</p><p>We will check that as soon as possible.</p>"
+        body = "<p>It appears to be that the image indexing for the project: "+project_name+" got an error and has not completed.</p><p>We will check that as soon as possible.</p>"
         msg.attach(MIMEText(body, "html"))
         print(msg)
         server = smtplib.SMTP("smtp.gmail.com", 587)

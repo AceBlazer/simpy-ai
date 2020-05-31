@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import os
+import re
 
 client = None
 db = None
@@ -90,8 +91,9 @@ def findProjectById(id):
     return collection.find_one({"_id": id})
 
 def findProjectByUrl(url):
+    regx = re.compile("/"+url+"/", re.IGNORECASE)
     collection = db["projects"]
-    return collection.find_one({"url": url})
+    return collection.find_one({"url": regx})
 
 def deleteProjectById(id):
     collection = db["projects"]
