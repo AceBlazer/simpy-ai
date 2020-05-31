@@ -4,7 +4,7 @@ link: https://simpy-ai.herokuapp.com/
 
 *TODO:
 
-vp trees
+vp trees (doing)
 send email when get N searches 
 not same res w/ diff upload methods of same picture
 apikey and stripe
