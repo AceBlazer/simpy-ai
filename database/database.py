@@ -17,7 +17,7 @@ def connect():
         else:
             client = MongoClient(os.environ["DB_HOST"], int(os.environ["DB_PORT"]))
             db = client[os.environ["DB_NAME"]]
-            db.authenticate(os.environ["DB_USER"], os.environ["DB_PASSWORD"])
+            #db.authenticate(os.environ["DB_USER"], os.environ["DB_PASSWORD"])
             print("Connected to db successfully with parameters")
     except Exception as e:
         print(e)
