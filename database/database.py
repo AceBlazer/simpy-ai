@@ -9,7 +9,7 @@ db = None
 
 def connect():
     try:
-        if os.environ["SIMPY_CONNECTION_STRING"]:
+        if os.environ["SIMPY_CONNECTION_STRING"] and len(os.environ["SIMPY_CONNECTION_STRING"])>0:
             client = MongoClient(os.environ["SIMPY_CONNECTION_STRING"])
             global db
             db = client["mydatabase"]
