@@ -2,15 +2,23 @@ from pymongo import MongoClient
 import os
 import re
 
+
 client = None
 db = None
 
+
 def connect():
     try:
+        '''
         client = MongoClient(os.environ["SIMPY_CONNECTION_STRING"])
         print("Connected to db successfully")
         global db
         db = client["mydatabase"]
+        '''
+
+        client = MongoClient(os.environ["DB_HOST"], int(os.environ["DB_PORT"]))
+        db = client[os.environ["DB_NAME"]]
+        db.authenticate(os.environ["DB_USER"], os.environ["DB_PASSWORD"])
     except Exception as e:
         print(e)
 
