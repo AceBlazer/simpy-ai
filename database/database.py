@@ -9,16 +9,16 @@ db = None
 
 def connect():
     try:
-        '''
         client = MongoClient(os.environ["SIMPY_CONNECTION_STRING"])
-        print("Connected to db successfully")
-        global db
-        db = client["mydatabase"]
-        '''
-
-        client = MongoClient(os.environ["DB_HOST"], int(os.environ["DB_PORT"]))
-        db = client[os.environ["DB_NAME"]]
-        db.authenticate(os.environ["DB_USER"], os.environ["DB_PASSWORD"])
+        if client:
+            global db
+            db = client["mydatabase"]
+            print("Connected to db successfully with conn string")
+        else:
+            client = MongoClient(os.environ["DB_HOST"], int(os.environ["DB_PORT"]))
+            db = client[os.environ["DB_NAME"]]
+            db.authenticate(os.environ["DB_USER"], os.environ["DB_PASSWORD"])
+            print("Connected to db successfully with parameters")
     except Exception as e:
         print(e)
 
