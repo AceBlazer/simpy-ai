@@ -93,7 +93,14 @@ def findProjectById(id):
 def findProjectByUrl(url):
     regx = re.compile("/"+url+"/", re.IGNORECASE)
     collection = db["projects"]
-    return collection.find_one({"url": regx})
+    x = collection.find_one({"url": url})
+    y = collection.find_one({"url": regx})
+    if x:
+        return x
+    elif y:
+        return y
+    else:
+        return None
 
 def deleteProjectById(id):
     collection = db["projects"]
