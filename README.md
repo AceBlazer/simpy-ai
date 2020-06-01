@@ -4,7 +4,10 @@ link: https://simpy-ai.herokuapp.com/
 
 *TODO:
 
-send email when get N searches 
+
+deploy backend + mlab
+paths: env vars
+send email when get N searches (nb searches  in project email every env var)
 not same res w/ diff upload methods of same picture
 apikey and stripe
 website

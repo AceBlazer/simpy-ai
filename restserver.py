@@ -273,6 +273,7 @@ def sendEmail(reciever, project_name):
         server.login(msg['from'], str(password))
         server.sendmail(msg['from'], msg['to'], msg.as_string())
         server.quit()
+        print("success email sent.")
     except Exception as e:
         print(e)
 
@@ -295,6 +296,7 @@ def sendErrorEmail(reciever, project_name):
         server.login(msg['from'], str(password))
         server.sendmail(msg['from'], msg['to'], msg.as_string())
         server.quit()
+        print("fail email sent.")
     except Exception as e:
         print(e)
 
