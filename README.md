@@ -1,12 +1,12 @@
-link: https://simpy-ai.herokuapp.com/
+widget link: https://simpy-ai.herokuapp.com/
+backend link: https://simpy-backend.herokuapp.com/
 
 
 
 *TODO:
 
-
-deploy backend + mlab (make procfile with ubuntu)
 send email when get N searches (nb searches  in project email every env var)
+
 not same res w/ diff upload methods of same picture
 apikey and stripe
 website
