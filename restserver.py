@@ -33,7 +33,7 @@ db.connect()
 ******************************************************************
 '''
 
-#get customer name, project name (later api key), given the shop url, to the frontend to  be able to call us.
+#get customer name, project name (later api key), given the shop url, to the frontend to  be able to call us
 @app.route('/shop-info', methods=['GET'])
 def shopInfo():
     try:
