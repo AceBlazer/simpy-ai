@@ -9,8 +9,8 @@ db = None
 
 def connect():
     try:
-        client = MongoClient(os.environ["SIMPY_CONNECTION_STRING"])
-        if client:
+        if os.environ["SIMPY_CONNECTION_STRING"]:
+            client = MongoClient(os.environ["SIMPY_CONNECTION_STRING"])
             global db
             db = client["mydatabase"]
             print("Connected to db successfully with conn string")
