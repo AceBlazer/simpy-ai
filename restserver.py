@@ -149,7 +149,6 @@ def register():
             "password": str(bcrypt.generate_password_hash(request.json["password"], 10).decode("utf-8")),
             "function": request.json["function"],
             "company": request.json["name"],
-            "url": request.json["url"],
             "address": ObjectId(str(xaddress.inserted_id)),
             "sector": request.json["sector"],
             "specialty": request.json["specialty"],
