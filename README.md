@@ -5,6 +5,11 @@ backend link: https://simpy-backend.herokuapp.com/
 
 *TODO:
 
+add all pictures to website
+add more products to website and localfolder
+need to index first error message
+empty uploader aftr every search
+center error image vertically
 send email when get N searches (nb searches  in project email every env var)
 
 not same res w/ diff upload methods of same picture

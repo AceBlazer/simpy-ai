@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', function () {
 
-    const backendUrl="http://localhost:5000";
+    const backendUrl="https://simpy-backend.herokuapp.com";
 
     //load shop infos (custoer name, project name) to send later in requests
     if (window.location.href.indexOf("C:/")>=0) {

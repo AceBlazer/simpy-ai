@@ -7,7 +7,7 @@ function indexNow() {
     const project_name = localStorage.getItem("project_name");
     const email = localStorage.getItem("email");
 
-    const backendUrl="http://localhost:5000";
+    const backendUrl="https://simpy-backend.herokuapp.com";
 
     Spinner();
     Spinner.show();
