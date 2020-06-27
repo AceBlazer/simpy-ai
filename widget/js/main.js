@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', function () {
 
+    const backendUrl="http://localhost:5000";
 
     //load shop infos (custoer name, project name) to send later in requests
     if (window.location.href.indexOf("C:/")>=0) {
@@ -9,7 +10,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     
     $.ajax({
-        url: "http://localhost:5000/shop-info",
+        url: backendUrl+"/shop-info",
         type: "GET",
         data: { url: localStorage.getItem("window_url") },
         dataType: "json",
@@ -79,7 +80,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }).on('hidden.bs.modal', function () {
         //console.log("IMAGE TO WORK WITH: " + global.getCroppedCanvas().toDataURL('image/jpeg'));
         $.ajax({
-            url: "http://localhost:5000/search",
+            url: backendUrl+"/search",
             type: "POST",
             data: JSON.stringify({ image: global.getCroppedCanvas().toDataURL('image/jpeg'), customer_name: localStorage.getItem("customer_name") , project_name: localStorage.getItem("project_name") }),
             dataType: "json",

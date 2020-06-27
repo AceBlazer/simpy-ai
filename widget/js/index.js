@@ -7,12 +7,14 @@ function indexNow() {
     const project_name = localStorage.getItem("project_name");
     const email = localStorage.getItem("email");
 
+    const backendUrl="http://localhost:5000";
+
     Spinner();
     Spinner.show();
     $("#indexButton").prop('disabled', true);
     if (customer_name != "" && project_name != "" && email != "") {
         $.ajax({
-            url: "http://localhost:5000/index",
+            url: backendUrl+"/index",
             type: "POST",
             data: JSON.stringify({ customer_name: customer_name, project_name: project_name, email: email }),
             contentType: "application/json; charset=utf-8",
