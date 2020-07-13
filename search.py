@@ -1,16 +1,17 @@
-# USAGE
-# python search.py --index index.csv --query queries/103100.png --result-path .
-
 # import the necessary packages
 from pyimagesearch.colordescriptor import ColorDescriptor
 from pyimagesearch.searcher import Searcher
 import argparse
 import cv2
 import os
+import base64
+import numpy as np
+from firestorage import getImage
 
 
 
-def run(query, index, result_path = None):
+
+def run(query, customer_name, project_name, index, result_path = None):
 	# initialize the image descriptor
 	cd = ColorDescriptor((8, 12, 3))
 
@@ -26,13 +27,11 @@ def run(query, index, result_path = None):
 	# loop over the results
 	if results:
 		for (score, resultID) in results:
-			# load the result image and display it
-			#result = cv2.imread(str(os.path.join(result_path, resultID)))
-			#cv2.imshow("Result", result)
-			#cv2.waitKey(0)
 			sim = {}
-			sim["image"] = str(resultID)
+			#sim["image"] = str(resultID)
+			#return link from firestore with id
+			sim["image"] = getImage("dataset/"+customer_name+"/"+project_name+"/"+os.path.basename(resultID))
 			sim["score"] = score
 			paths.append(sim)
-
+        
 	return paths

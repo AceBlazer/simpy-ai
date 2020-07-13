@@ -7,6 +7,8 @@ backend link: https://simpy-backend.herokuapp.com/
 
 add all pictures to website
 add more products to website and localfolder
+help always adds text :(
+--DEMO--
 need to index first error message
 empty uploader aftr every search
 center error image vertically

@@ -1,17 +1,16 @@
-# USAGE
-# python index.py --dataset dataset --index index.csv
-
 # import the necessary packages
 from pyimagesearch.colordescriptor import ColorDescriptor
+from firestorage import uploadRetrievedImages, uploadIndexes
 import argparse
 import glob
 import cv2
+import os
+import time
 
 
 
-
-
-def indexNow(dataset, index):
+def indexNow(customer_name, project_name, index):
+	dataset = os.path.join("dataset", customer_name, project_name)
 	# initialize the color descriptor
 	cd = ColorDescriptor((8, 12, 3))
 
@@ -37,7 +36,7 @@ def indexNow(dataset, index):
 
 
 	for imagePath in glob.glob(str(dataset) + "/*.jpeg"):
-    		# extract the image ID (i.e. the unique filename) from the image
+    	# extract the image ID (i.e. the unique filename) from the image
 		# path and load the image itself
 		imageID = imagePath[imagePath.rfind("/") + 1:]
 		image = cv2.imread(imagePath)
@@ -51,7 +50,7 @@ def indexNow(dataset, index):
 
 
 	for imagePath in glob.glob(str(dataset) + "/*.png"):
-    		# extract the image ID (i.e. the unique filename) from the image
+    	# extract the image ID (i.e. the unique filename) from the image
 		# path and load the image itself
 		imageID = imagePath[imagePath.rfind("/") + 1:]
 		image = cv2.imread(imagePath)
@@ -62,6 +61,15 @@ def indexNow(dataset, index):
 		# write the features to file
 		features = [str(f) for f in features]
 		output.write("%s,%s\n" % (imageID, ",".join(features)))
+
+	print("=========> started uploading into firebase")
+	start_time = time.time()
+	#upload all retrieved images to firestorage
+	uploadRetrievedImages(customer_name, project_name)
+
+	#TODO: upload indexes
+	uploadIndexes(customer_name, project_name)
+	print("=========> firebase upload time taken: %s" %(time.time() - start_time))
 
 	# close the index file
 	output.close()

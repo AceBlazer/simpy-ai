@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', function () {
 
-    const backendUrl="https://simpy-backend.herokuapp.com";
+    //const backendUrl="https://simpy-backend.herokuapp.com";
+    const backendUrl="http://localhost:5000";
 
     //load shop infos (custoer name, project name) to send later in requests
     if (window.location.href.indexOf("C:/")>=0) {
@@ -99,7 +100,7 @@ window.addEventListener('DOMContentLoaded', function () {
                         img.css("margin", "10px");
                         img.css("cursor", "pointer");
                         img.css("border-radius", "2px");
-                        img.attr('src', "../" + data.similars[i].image.toString());
+                        img.attr('src', data.similars[i].image.toString());
                         img.appendTo('#resContainer');
                     }
                 } else {

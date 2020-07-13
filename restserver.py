@@ -16,6 +16,7 @@ from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 import json
 from bson.json_util import dumps
+from firestorage import uploadQueryImage
 
 
 app = Flask(__name__)
@@ -187,13 +188,11 @@ def login():
 *************  Routes interacting with AI
 *****************************************
 '''
-
+#modified path of dataset in indexnow 
 @app.route('/index', methods=['POST'])
 def index():
     try:
-        pathIndex = os.path.join("indexes", request.json["project_name"])
-        pathIndex = os.path.join(pathIndex, request.json["customer_name"])
-        pathIndex = os.path.join(pathIndex, "index.csv")
+        pathIndex = os.path.join("indexes", request.json["customer_name"], request.json["project_name"], "index.csv")
         reciever = request.json["email"]
         if not os.path.exists(os.path.dirname(pathIndex)):
                 try:
@@ -201,9 +200,8 @@ def index():
                 except OSError as exc: # Guard against race condition
                     if exc.errno != errno.EEXIST:
                         raise
-        indexNow("dataset", pathIndex)
+        indexNow(request.json["customer_name"], request.json["project_name"], pathIndex)
         sendEmail(reciever, request.json["project_name"])
-        #return ("Images indexed successfully.")
         return Response("Images indexed successfully.", status=200, mimetype='application/javascript')
     except Exception as e:
         print(e)
@@ -219,9 +217,9 @@ def search():
             base64_img_bytes = base64_img.encode('utf-8')
             currentDT = datetime.datetime.now().isoformat()
             imgname = str(currentDT).replace(":","-").replace(".","_")+".jpg"
-            path = os.path.join("queries", request.json["project_name"])
-            path = os.path.join(path, request.json["customer_name"])
-            path = os.path.join(path, imgname)
+            path = os.path.join("queries", request.json["customer_name"], request.json["project_name"], imgname)
+            customer_name = request.json["customer_name"]
+            project_name = request.json["project_name"]
             if not os.path.exists(os.path.dirname(path)):
                 try:
                     os.makedirs(os.path.dirname(path))
@@ -231,10 +229,9 @@ def search():
             with open(path, 'wb') as file_to_save:
                 decoded_image_data = base64.decodebytes(base64_img_bytes)
                 file_to_save.write(decoded_image_data)
-                pathIndex = os.path.join("indexes", request.json["project_name"])
-                pathIndex = os.path.join(pathIndex, request.json["customer_name"])
-                pathIndex = os.path.join(pathIndex, "index.csv")
-                similars = run(path, pathIndex)
+                pathIndex = os.path.join("indexes", request.json["customer_name"], request.json["project_name"], "index.csv")
+                similars = run(path, customer_name, project_name, pathIndex)
+                uploadQueryImage(customer_name, project_name)
                 return {"similars": similars}
         except Exception as e:
              print(str(e))

@@ -1,6 +1,7 @@
 # import the necessary packages
 import numpy as np
 import csv
+from scipy import spatial
 
 class Searcher:
 	def __init__(self, indexPath):
@@ -23,6 +24,7 @@ class Searcher:
 				# and our query features
 				features = [float(x) for x in row[1:]]
 				d = self.chi2_distance(features, queryFeatures)
+				#d = spatial.distance.cosine(features, queryFeatures)
 
 				# now that we have the distance between the two feature
 				# vectors, we can udpate the results dictionary -- the
