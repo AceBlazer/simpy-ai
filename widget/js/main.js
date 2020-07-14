@@ -93,7 +93,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 if (data.similars.length > 0) {
                     //similars found
                     for (let i in data.similars) {
-                        console.log(data.similars[i].image)
                         var img = $('<img id="$' + i.toString() + '">');
                         img.css("height", "200px");
                         img.css("width", "auto");
