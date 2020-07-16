@@ -135,8 +135,12 @@ window.addEventListener('DOMContentLoaded', function () {
 
 function help() {
     console.log("helppppp")
-    var p1 = $("<p> This is a widget that can be added to any e-commerce website to help merchants by providing \"similar images search of a product\" to their customers in order to increase sales and store efficiency. </p>")
-    var p2 = $("<p> It is all designed and developed by Jasser Saanoun (saanoun.jasser21@gmail.com). </p>")
-    p1.insertBefore('#drop-region')
-    p2.insertBefore('#drop-region')
+    var p1 = $("<p id='h1'> This is a widget that can be added to any e-commerce website to help merchants by providing \"similar images search of a product\" to their customers in order to increase sales and store efficiency. </p>")
+    var p2 = $("<p id='h2'> It is all designed and developed by Jasser Saanoun (saanoun.jasser21@gmail.com). </p>")
+    if ($("#h1").length) {
+        //nothing
+    } else {
+        p1.insertBefore('#drop-region')
+        p2.insertBefore('#drop-region')
+    }
 }
