@@ -40,4 +40,5 @@ def uploadQueryImage(customer_name, project_name):
 
 def getImage(imgPath):
     blob = storage.bucket(os.environ['FIRESTORAGE_BUCKET']).blob(imgPath) 
-    return(blob.generate_signed_url(datetime.timedelta(weeks=30000), method='GET'))
+    #return(blob.generate_signed_url(datetime.timedelta(weeks=6000), method='GET'))
+    return(blob.public_url)
