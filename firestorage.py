@@ -39,5 +39,9 @@ def uploadQueryImage(customer_name, project_name):
 
 
 def getImage(imgPath):
+    cred = credentials.Certificate('./serviceAccount.json')
+    firebase_admin.initialize_app(cred, {
+        'storageBucket': os.environ['FIRESTORAGE_BUCKET']
+    })
     blob = storage.bucket(os.environ['FIRESTORAGE_BUCKET']).blob(imgPath) 
     return(blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET'))
