@@ -1,1 +1,1 @@
-web: gunicorn restserver:app
+web: gunicorn restserver:app --timeout 3600
