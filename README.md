@@ -4,11 +4,13 @@ backend link: https://simpy-backend.herokuapp.com/
 
 
 *TODO:
-
+remove doublons from dataset
 add all pictures to website
-add more products to website and localfolder
 spinner on search similars
+see why bad results (other algos od similarity bc this algo considers colors more than shape)
 --DEMO--
+if img is not cropped send all the image to backend
+see what's taking so long in search (if search => vp trees)
 need to index first error message
 empty uploader aftr every search
 center error image vertically
