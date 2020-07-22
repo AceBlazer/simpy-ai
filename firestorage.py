@@ -18,8 +18,14 @@ def uploadRetrievedImages(customer_name, project_name):
     path = "dataset"+"/"+customer_name+"/"+project_name
     for imgName in os.listdir(path):
         imgName = path+"/"+imgName
-        blob = storage.bucket(os.environ['FIRESTORAGE_BUCKET']).blob(imgName) # intended name of file in Firebase Storage
-        blob.upload_from_filename(imgName) # path to file on local disk
+        if os.path.isfile(imgName):
+            blob = storage.bucket(os.environ['FIRESTORAGE_BUCKET']).blob(imgName) # intended name of file in Firebase Storage
+            blob.upload_from_filename(imgName) # path to file on local disk
+        else:
+            #its a directory
+            for img in os.listdir(imgName):
+                blob = storage.bucket(os.environ['FIRESTORAGE_BUCKET']).blob(img) # intended name of file in Firebase Storage
+                blob.upload_from_filename(img) # path to file on local disk 
 
 def uploadIndexes(customer_name, project_name):
     #here we don't use os.path.join to enable firebase to create folders
