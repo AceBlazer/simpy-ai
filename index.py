@@ -21,7 +21,7 @@ def indexNow(customer_name, project_name, index):
 
 
 	#TODO: all img extentions
-	for imagePath in glob.glob(str(dataset) + "/*.jpg"):
+	for imagePath in glob.glob(str(dataset) + "/*/*.jpg"):
 		# extract the image ID (i.e. the unique filename) from the image
 		# path and load the image itself
 		imageID = imagePath[imagePath.rfind("/") + 1:]
@@ -35,7 +35,7 @@ def indexNow(customer_name, project_name, index):
 		output.write("%s,%s\n" % (imageID, ",".join(features)))
 
 
-	for imagePath in glob.glob(str(dataset) + "/*.jpeg"):
+	for imagePath in glob.glob(str(dataset) + "/*/*.jpeg"):
     	# extract the image ID (i.e. the unique filename) from the image
 		# path and load the image itself
 		imageID = imagePath[imagePath.rfind("/") + 1:]
@@ -49,7 +49,7 @@ def indexNow(customer_name, project_name, index):
 		output.write("%s,%s\n" % (imageID, ",".join(features)))
 
 
-	for imagePath in glob.glob(str(dataset) + "/*.png"):
+	for imagePath in glob.glob(str(dataset) + "/*/*.png"):
     	# extract the image ID (i.e. the unique filename) from the image
 		# path and load the image itself
 		imageID = imagePath[imagePath.rfind("/") + 1:]
