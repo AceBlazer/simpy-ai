@@ -33,7 +33,6 @@ def uploadRetrievedImages(customer_name, project_name):
     try:
         p = Process(target=uploadRetrievedImagesCore, args=(customer_name, project_name))
         p.start()
-        p.join()
     except Exception as e:
         print("Error when uploading to firebase: %s" %e)
 
