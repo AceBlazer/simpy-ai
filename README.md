@@ -4,11 +4,12 @@ backend link: https://simpy-backend.herokuapp.com/
 
 
 *TODO:
-remove doublons from dataset
 add all pictures to website
 spinner on search similars
 see why bad results (other algos od similarity bc this algo considers colors more than shape)
 --DEMO--
+remove doublons from dataset
+dont wait for the upload (async, multiprocessing)
 if img is not cropped send all the image to backend
 see what's taking so long in search (if search => vp trees)
 need to index first error message
