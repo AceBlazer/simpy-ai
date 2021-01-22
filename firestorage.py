@@ -5,7 +5,6 @@ import datetime
 import os
 from multiprocessing import Process
 
-
 cred = credentials.Certificate('./serviceAccount.json')
 firebase_admin.initialize_app(cred, {
     'storageBucket': os.environ['FIRESTORAGE_BUCKET']

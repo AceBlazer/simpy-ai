@@ -23,8 +23,8 @@ class Searcher:
 				# chi-squared distance between the features in our index
 				# and our query features
 				features = [float(x) for x in row[1:]]
-				#d = self.chi2_distance(features, queryFeatures)
-				d = spatial.distance.cosine(features, queryFeatures)
+				d = self.chi2_distance(features, queryFeatures)
+				#d = spatial.distance.cosine(features, queryFeatures)
 
 				# now that we have the distance between the two feature
 				# vectors, we can udpate the results dictionary -- the
