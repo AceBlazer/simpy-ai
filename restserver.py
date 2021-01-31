@@ -231,7 +231,7 @@ def search():
                 file_to_save.write(decoded_image_data)
                 pathIndex = os.path.join("indexes", request.json["customer_name"], request.json["project_name"], "index.csv")
                 similars = run(path, customer_name, project_name, pathIndex)
-                uploadQueryImage(customer_name, project_name)
+                #uploadQueryImage(customer_name, project_name)
                 return {"similars": similars}
         except Exception as e:
              print(str(e))

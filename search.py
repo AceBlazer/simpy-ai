@@ -31,7 +31,7 @@ def run(query, customer_name, project_name, index, result_path = None):
 			#sim["image"] = str(resultID)
 			#return link from firestore with id
 			sim["image"] = getImage("dataset/"+customer_name+"/"+project_name+"/"+os.path.basename(resultID))
-			sim["image"] = getImage("dataset/"+customer_name+"/"+project_name+"/"+str(resultID))
+			#sim["image"] = getImage("dataset/"+customer_name+"/"+project_name+"/"+str(resultID))
 			sim["score"] = score
 			paths.append(sim)
         
