@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modal Example</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <!-- Buttons to open modals -->
+    <button id="openRegisterModalBtn">Register</button>
+    <button id="openLoginModalBtn">Login</button>
+    <button id="openCreateProjectModalBtn">Create Project</button>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span id="closeRegisterModal" class="close">&times;</span>
+        <h2>Register</h2>
+        <form id="registerForm" onsubmit="registerUser(event)">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="registerEmail"
+            name="email"
+            required
+          /><br /><br />
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="registerPassword"
+            name="password"
+            required
+          /><br /><br />
+          <button type="submit" class="button">Register</button>
+        </form>
+        <p id="registerResponse"></p>
+      </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span id="closeLoginModal" class="close">&times;</span>
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="loginUser(event)">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="loginEmail"
+            name="email"
+            required
+          /><br /><br />
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="loginPassword"
+            name="password"
+            required
+          /><br /><br />
+          <button type="submit" class="button">Login</button>
+        </form>
+        <p id="loginResponse"></p>
+      </div>
+    </div>
+
+    <!-- Create Project Modal -->
+    <div id="createProjectModal" class="modal">
+      <div class="modal-content">
+        <span id="closeCreateProjectModal" class="close">&times;</span>
+        <h2>Create a Project</h2>
+        <form id="createProjectForm" onsubmit="createProject(event)">
+          <label for="name">Project Name:</label>
+          <input
+            type="text"
+            id="projectName"
+            name="name"
+            required
+          /><br /><br />
+          <label for="url">Project URL:</label>
+          <input type="url" id="projectUrl" name="url" required /><br /><br />
+          <label for="customerId">Customer ID:</label>
+          <input
+            type="text"
+            id="customerId"
+            name="customerId"
+            required
+          /><br /><br />
+          <button type="submit" class="button">Create Project</button>
+        </form>
+        <p id="createProjectResponse"></p>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

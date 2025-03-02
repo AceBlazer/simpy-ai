@@ -1,0 +1,223 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Body Styling */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #00b894, #6c5ce7);
+  color: #fff;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+label {
+  color: black;
+}
+
+/* Modal Styling */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(15px);
+  z-index: 9999;
+  transition: opacity 0.4s ease-in-out;
+  overflow-y: auto;
+}
+
+/* Modal Content */
+.modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 40px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease-out;
+  transform: scale(0.9);
+}
+
+/* Modal Opening Animation */
+.modal.show .modal-content {
+  transform: scale(1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 25px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+/* Close Button */
+.close {
+  color: #333;
+  font-size: 32px;
+  font-weight: bold;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close:hover,
+.close:focus {
+  color: #e74c3c;
+}
+
+/* Form Styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="url"] {
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #f4f7fa;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus,
+input[type="url"]:focus {
+  border: 1px solid #6c5ce7;
+  background-color: #e9f4ff;
+  outline: none;
+}
+
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="text"]:hover,
+input[type="url"]:hover {
+  background-color: #f9fafb;
+}
+
+/* Button Styling */
+button {
+  padding: 16px;
+  font-size: 18px;
+  color: white;
+  background: #6c5ce7;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background: #5e4bdb;
+  transform: translateY(-2px);
+}
+
+button:focus {
+  outline: none;
+  background: #5e4bdb;
+}
+
+/* Error Message */
+p.error {
+  color: #e74c3c;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Modal Action Buttons */
+button.open-modal-btn {
+  background-color: #00cec9;
+  padding: 16px 30px;
+  font-size: 18px;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button.open-modal-btn:hover {
+  background-color: #00b894;
+  transform: translateY(-2px);
+}
+
+button.open-modal-btn:focus {
+  outline: none;
+}
+
+/* Modal Content Animations */
+@keyframes modal-open {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Fade In */
+.modal-content {
+  animation: modal-open 0.5s ease-out forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 85%;
+    padding: 25px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="url"] {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  button {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .open-modal-btn {
+    font-size: 16px;
+    padding: 14px;
+  }
+}
