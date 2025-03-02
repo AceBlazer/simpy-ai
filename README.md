@@ -1,11 +1,11 @@
-widget link: https://simpy-ai.herokuapp.com/
-backend link: https://simpy-backend.herokuapp.com/
+widget link: https://simpy-ai-widget.onrender.com
+backend link: https://simpy-ai.onrender.com
 
 windows: waitress-serve --listen=127.0.0.1:5000 restserver:app
 GMPW: pmlhuubo first car mother namex2 mmlp first car my name first car mother name
 FIRESTORAGE_BUCKET: simpy-cc tltha thmnn first car jrni name.appspot.com
 SIMPY_CONNECTION_STRING: mongodb://localhost:27017
-SERVICE_ACCOUNT_JSON=
+SERVICE_ACCOUNT_JSON=pathtofile
 
 \*TODO:
 insert logo
