@@ -1,39 +1,55 @@
+async function indexNow() {
+  const customer_name = localStorage.getItem("customer_name");
+  const project_name = localStorage.getItem("project_name");
+  const email = localStorage.getItem("email");
 
+  const backendUrl = "http://localhost:5000";
 
+  // Check for missing credentials
+  if (!customer_name || !project_name || !email) {
+    alert(
+      "Missing customer name, project name, or email. Please provide all details."
+    );
+    return;
+  }
 
-function indexNow() {
+  // Show spinner and disable button
+  Spinner();
+  Spinner.show();
+  $("#indexButton").prop("disabled", true);
 
-    const customer_name = localStorage.getItem("customer_name");
-    const project_name = localStorage.getItem("project_name");
-    const email = localStorage.getItem("email");
+  try {
+    // Make the POST request to backend
+    const response = await fetch(`${backendUrl}/index`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        customer_name: customer_name,
+        project_name: project_name,
+        email: email,
+      }),
+    });
 
-    //const backendUrl="https://simpy-backend.herokuapp.com";
-    const backendUrl="http://localhost:5000";
-
-    Spinner();
-    Spinner.show();
-    $("#indexButton").prop('disabled', true);
-    if (customer_name != "" && project_name != "" && email != "") {
-        $.ajax({
-            url: backendUrl+"/index",
-            type: "POST",
-            data: JSON.stringify({ customer_name: customer_name, project_name: project_name, email: email }),
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                Spinner.hide();
-                $("#indexButton").prop('disabled', false);
-                alert(data)
-            },
-            error: function (err) {
-                console.log(err)
-                alert("error");
-            }
-        });
-    } else {
-        console.log("empty credentials to send")
+    // Check for non-200 responses
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.statusText}`);
     }
 
+    const data = await response.text();
 
+    // Hide spinner and enable button
+    Spinner.hide();
+    $("#indexButton").prop("disabled", false);
 
-
+    // Show success message
+    alert(data);
+  } catch (err) {
+    // Handle errors: server issues, network issues, etc.
+    console.error("Request failed", err);
+    Spinner.hide();
+    $("#indexButton").prop("disabled", false);
+    alert(`Error: ${err.message || "An unexpected error occurred."}`);
+  }
 }

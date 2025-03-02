@@ -1,178 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <title>Simpy</title>
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.css">
-    <link rel="stylesheet" href="css/drag.css">
-    <link rel="stylesheet" href="css/main.css">
-</head>
+    <link
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.css"
+    />
+    <link rel="stylesheet" href="css/drag.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <style>
+      /* Make sure the page stretches to full height */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
 
-<body>
-    <div class="container">
-        <h1>Simpy</h1>
+      /* The main container to stretch and push content to the bottom */
+      .container-fluid {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-target="#uploadModal" data-toggle="modal" title="Simpy">
-            <i class="fa fa-camera" aria-hidden="true"></i>
+      /* Push content to the bottom */
+      .content {
+        flex-grow: 1;
+      }
+
+      /* Make the author and project section align at the bottom */
+      .author-project-row {
+        margin-top: auto;
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <!-- Header with logo and title -->
+      <header class="d-flex justify-content-between align-items-center py-4">
+        <img
+          src="./img/Screenshot_20200901_160724.jpg"
+          alt="Logo"
+          style="height: 80px"
+        />
+        <h1 style="font-size: 24px">Simpy Demo</h1>
+      </header>
+
+      <!-- Modal triggers, upload, cropper, and results modals -->
+      <div style="display: flex; gap: 10px; padding: 5%">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-target="#uploadModal"
+          data-toggle="modal"
+          title="Simpy"
+        >
+          <i class="fa fa-camera" aria-hidden="true"></i>
         </button>
 
-
-
-
-
-
-        <!-- upload Modal -->
-        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-            aria-hidden="true" data-backdrop="false" style="width: 50%;transform: translate(50%, 10%);">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel">Upload</h5>
-                        <button title="What's this?"
-                            style="right: 50px;position: absolute;background-color: transparent;border: none;"
-                            onclick="help()">
-                            <i class="fa fa-question-circle" aria-hidden="true" style="top: 6.5%"></i>
-                        </button>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-
-                        <div id="drop-region" style="width: 100%;">
-                            <div class="drop-message">
-                                Drag & Drop images or click to upload
-                            </div>
-                            <div id="image-preview"></div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success"
-                            onclick="$('#uploadModal').modal('hide');$('#modal').modal('show');">Next</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-
-        <!-- crop Modal -->
-        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true"
-            style="overflow-y: auto;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel">Cropper</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="img-container">
-                            <img id="image" src="https://tu-sofia.bg/videoLabsEn/imageVideo/no-image.png" alt="Picture">
-
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Done</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <button id="indexButton" type="button" class="btn btn-primary" onClick="indexNow()">
-            Index now
+        <button
+          id="indexButton"
+          type="button"
+          class="btn btn-primary"
+          onClick="indexNow()"
+        >
+          Index now
         </button>
-        <div id="spinnerContainer" style="position: absolute;display: inline;margin: 30px;">
-        </div>
+        <div id="spinnerContainer"></div>
+      </div>
 
-
-
-
-<!--
-        <h3>Our prducts</h3>
-        <img src="https://cdn.shopify.com/s/files/1/0707/2435/products/MG_9610_768x.jpg" height="100px" width="120px">
-        <br>
-        <img src="https://media.bergdorfgoodman.com/image/upload/b_rgb:e9eaeb/f_auto,q_auto:low,ar_5:7,c_fill,dpr_2.0,w_720/01/2767765_m"
-            height="100px" width="120px"> <br>
-        <img src="https://cdn.shopify.com/s/files/1/3000/0340/products/frontfull_c2b710ab-3a2e-4b6c-ba4b-a49790768deb_1200x.jpg?v=1576669887"
-            height="100px" width="120px"> <br>
-        <img src="https://s1.thcdn.com/productimg/1600/1600/11437541-4204544991684636.jpg" height="100px" width="120px">
-        <br>
-        <img src="https://cdn.shopify.com/s/files/1/3000/0340/products/frontleggingscrop_c25f01fc-86bd-4c97-9db7-e48e7946b0f6_1200x.jpg"
-            height="100px" width="120px"> <br>
-        <img src="https://media.dollskill.com/media/BwloirkNr6rf6tycBxAPKSElqnWpxhqW-34.jpg" height="100px"
-            width="120px"> <br>
-        <img src="https://media.dollskill.com/media/T6ESf3qE9PWvGOdHc7VRwd4IkEmTS4Hc-34.jpg" height="100px"
-            width="120px"> <br>
-        <img src="https://media.dollskill.com/media/QGa4yxZqFPhPiWNtwOJZFWySTvSMJxcu-34.jpg" height="100px"
-            width="120px"> <br>
-        <img src="https://img.gymshark.com/image/fetch/q_auto,f_auto,w_auto/https://cdn.shopify.com/s/files/1/0156/6146/products/CAMO_SEAMLESS_LEGGINGS_WINTER_BERRY_A-Edit.jpg"
-            height="100px" width="120px"> <br>
-        <img src="https://img.gymshark.com/image/fetch/q_auto,f_auto,w_auto/https://cdn.shopify.com/s/files/1/0156/6146/products/ADAPTCAMOSEAMLESSLEGGINGSDUSKYPINK.A-Edit_BK.jpg"
-            height="100px" width="120px"> <br>
--->
-
-
-
-        <!--Result modal-->
-        <div class="modal fade" id="modalRes" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel">Result</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="resContainer" class="img-container"
-                            style="height: 500px; overflow-y: scroll;text-align: center;">
-                            <!--res iages goes here-->
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
+      <!-- Upload Modal -->
+      <div
+        class="modal fade"
+        id="uploadModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modalLabel"
+        aria-hidden="true"
+        data-backdrop="false"
+        style="width: 50%; transform: translate(50%, 10%)"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalLabel">Upload</h5>
+              <button
+                title="What's this?"
+                style="
+                  right: 50px;
+                  position: absolute;
+                  background-color: transparent;
+                  border: none;
+                "
+                onclick="help()"
+              >
+                <i
+                  class="fa fa-question-circle"
+                  aria-hidden="true"
+                  style="top: 6.5%"
+                ></i>
+              </button>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
+            <div class="modal-body">
+              <div id="drop-region" style="width: 100%">
+                <div class="drop-message">
+                  Drag & Drop images or click to upload
+                </div>
+                <div id="image-preview"></div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-success"
+                onclick="$('#uploadModal').modal('hide');$('#modal').modal('show');"
+              >
+                Next
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
 
+      <!-- Crop Modal -->
+      <div
+        class="modal fade"
+        id="modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modalLabel"
+        aria-hidden="true"
+        style="overflow-y: auto"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalLabel">Cropper</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="img-container">
+                <img
+                  id="image"
+                  src="https://tu-sofia.bg/videoLabsEn/imageVideo/no-image.png"
+                  alt="Picture"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-success"
+                data-dismiss="modal"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Result modal-->
+      <div
+        class="modal fade"
+        id="modalRes"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalLabel">Result</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div
+                id="resContainer"
+                class="img-container"
+                style="height: 500px; overflow-y: scroll; text-align: center"
+              >
+                <!--res iages goes here-->
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Content Section -->
+      <div class="content"></div>
+
+      <!-- Author and Project Sections at the bottom of the page in a row -->
+      <div class="author-project-row container mt-5 pt-5">
+        <hr />
+        <div class="row justify-content-between align-items-center">
+          <!-- Author Section -->
+          <div class="col-md-6 mb-3" style="border-right: 1px solid #e0e0e0">
+            <div class="author-widget">
+              <div class="d-flex align-items-center">
+                <img
+                  src="./img/jasser.jpg"
+                  alt="Author Image"
+                  style="height: 100px; border-radius: 50%; margin-right: 20px"
+                />
+                <!-- Replace with author's image path -->
+                <div>
+                  <p><strong>Author:</strong> Jasser Saanoun</p>
+                  <p>
+                    <strong>GitHub:</strong>
+                    <a href="https://github.com/AceBlazer" target="_blank"
+                      >AceBlazer</a
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Details Section -->
+          <div class="col-md-6 mb-3">
+            <div class="project-info">
+              <p>
+                <strong>Project:</strong> Simpy AI (Similarity Image Search)
+              </p>
+              <p>
+                This project is based on the
+                <a
+                  href="https://pyimagesearch.com/2014/12/01/complete-guide-building-image-search-engine-python-opencv/"
+                  target="_blank"
+                  >Complete Guide to Building an Image Search Engine with Python
+                  and OpenCV</a
+                >
+                method.
+              </p>
+              <p><strong>Project Date:</strong> 25th August 2025</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.js"></script>
 
     <script type="text/javascript" src="js/main.js"></script>
-
     <script type="text/javascript" src="js/index.js"></script>
-
     <script type="text/javascript" src="js/drag.js"></script>
-
     <script type="text/javascript" src="js/loading-spinner.js"></script>
-
-</body>
-
+  </body>
 </html>
