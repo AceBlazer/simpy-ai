@@ -1,4 +1,5 @@
-widget link: https://simpy-ai-widget.onrender.com
+widget link: https://simpy-ai-widget.onrender.com/widget
+backoffice link: https://simpy-ai-widget.onrender.com/bo/index.html
 backend link: https://simpy-ai.onrender.com
 
 windows: waitress-serve --listen=127.0.0.1:5000 restserver:app
