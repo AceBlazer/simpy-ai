@@ -1,5 +1,6 @@
 window.addEventListener("DOMContentLoaded", function () {
-  const backendUrl = "http://localhost:5000";
+  // const backendUrl = "http://localhost:5000";
+  const backendUrl = "https://simpy-ai.onrender.com";
 
   // Load shop info (customer name, project name) to send later in requests
   try {

@@ -3,7 +3,8 @@ async function indexNow() {
   const project_name = localStorage.getItem("project_name");
   const email = localStorage.getItem("email");
 
-  const backendUrl = "http://localhost:5000";
+  // const backendUrl = "http://localhost:5000";
+  const backendUrl = "https://simpy-ai.onrender.com";
 
   // Check for missing credentials
   if (!customer_name || !project_name || !email) {

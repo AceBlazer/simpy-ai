@@ -1,3 +1,6 @@
+// const backendUrl = "http://localhost:5000";
+const backendUrl = "https://simpy-ai.onrender.com";
+
 // Get the modal elements
 var registerModal = document.getElementById("registerModal");
 var loginModal = document.getElementById("loginModal");
@@ -74,7 +77,7 @@ function registerUser(event) {
     redirect: "follow",
   };
 
-  fetch("http://localhost:5000/register", requestOptions)
+  fetch(`${backendUrl}/register`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       document.getElementById("registerResponse").innerText =
@@ -108,7 +111,7 @@ function loginUser(event) {
     redirect: "follow",
   };
 
-  fetch("http://localhost:5000/login", requestOptions)
+  fetch(`${backendUrl}/login`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       document.getElementById("loginResponse").innerText = "Login successful!";
@@ -143,7 +146,7 @@ function createProject(event) {
     redirect: "follow",
   };
 
-  fetch("http://localhost:5000/project", requestOptions)
+  fetch(`${backendUrl}/project`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       document.getElementById("createProjectResponse").innerText =
