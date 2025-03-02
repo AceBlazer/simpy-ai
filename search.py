@@ -9,30 +9,29 @@ import numpy as np
 from firestorage import getImage
 
 
+def run(query, customer_name, project_name, index, result_path=None):
+    # initialize the image descriptor
+    cd = ColorDescriptor((8, 12, 3))
 
+    # load the query image and describe it
+    query = cv2.imread(str(query))
+    features = cd.describe(query)
 
-def run(query, customer_name, project_name, index, result_path = None):
-	# initialize the image descriptor
-	cd = ColorDescriptor((8, 12, 3))
+    # perform the search
+    searcher = Searcher(str(index))
+    results = searcher.search(features)
 
-	# load the query image and describe it
-	query = cv2.imread(str(query))
-	features = cd.describe(query)
+    paths = []
+    # loop over the results
+    if results:
+        for (score, resultID) in results:
+            sim = {}
+            #sim["image"] = str(resultID)
+            # return link from firestore with id
+            sim["image"] = getImage(
+                "dataset/"+customer_name+"/"+project_name+"/"+os.path.basename(resultID))
+            #sim["image"] = getImage("dataset/"+customer_name+"/"+project_name+"/"+str(resultID))
+            sim["score"] = score
+            paths.append(sim)
 
-	# perform the search
-	searcher = Searcher(str(index))
-	results = searcher.search(features)
-
-	paths = []
-	# loop over the results
-	if results:
-		for (score, resultID) in results:
-			sim = {}
-			#sim["image"] = str(resultID)
-			#return link from firestore with id
-			sim["image"] = getImage("dataset/"+customer_name+"/"+project_name+"/"+os.path.basename(resultID))
-			#sim["image"] = getImage("dataset/"+customer_name+"/"+project_name+"/"+str(resultID))
-			sim["score"] = score
-			paths.append(sim)
-        
-	return paths
+    return paths

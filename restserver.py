@@ -25,16 +25,15 @@ bcrypt = Bcrypt(app)
 db.connect()
 
 
-
-
-
 '''
 ******************************************************************
 *************  Routes interacting with db (mostly for the website)
 ******************************************************************
 '''
 
-#get customer name, project name (later api key), given the shop url, to the frontend to  be able to call us
+# get customer name, project name (later api key), given the shop url, to the frontend to  be able to call us
+
+
 @app.route('/shop-info', methods=['GET'])
 def shopInfo():
     try:
@@ -54,10 +53,12 @@ def shopInfo():
         print(e)
         return Response("{'error':'Error occured when getting shop info.'}", status=500, mimetype='application/json')
 
-#get cust by id or del customer by id
+# get cust by id or del customer by id
+
+
 @app.route('/customer', methods=['GET', 'DELETE'])
 def customer():
-    try: 
+    try:
         customer = request.args['id']
         if request.method == 'GET':
             x = db.findCustomerById(ObjectId(customer))
@@ -76,10 +77,10 @@ def customer():
         return Response("{'error':'Error occured when adding/deleting customer.'}", status=500, mimetype='application/json')
 
 
-#get project, add project to customerId, delete project
+# get project, add project to customerId, delete project
 @app.route('/project', methods=['GET', 'POST', 'DELETE'])
 def project():
-    try: 
+    try:
         if request.method == 'GET':
             projectId = request.args['id']
             x = db.findProjectById(projectId)
@@ -94,14 +95,15 @@ def project():
             }
             xproject = db.add("projects", project_info)
             print(type(xproject.inserted_id))
-            x = db.addProjectToCustomer(ObjectId(request.json["customerId"]), xproject.inserted_id)
+            x = db.addProjectToCustomer(
+                ObjectId(request.json["customerId"]), xproject.inserted_id)
             if x:
                 return Response("project successfully added.", status=200, mimetype='application/json')
             else:
                 return Response("{'error':'Project not added.'}", status=500, mimetype='application/json')
 
         else:
-            #todo: update all customers projects field if its not automatically done by pymongo
+            # todo: update all customers projects field if its not automatically done by pymongo
             projectId = request.args['id']
             x = db.deleteProjectById(ObjectId(projectId))
             if x:
@@ -113,13 +115,13 @@ def project():
         return Response("{'error':'Error occured when adding/deleting project.'}", status=500, mimetype='application/json')
 
 
-#get projects of customer ID
+# get projects of customer ID
 @app.route('/projects', methods=['GET'])
 def projects():
-    try: 
+    try:
         customerId = request.args['id']
         projects = db.findProjectsOfCustomer(ObjectId(customerId))
-        if len(projects)>0:
+        if len(projects) > 0:
             resp = []
             for project in projects:
                 resp.append(project)
@@ -131,9 +133,10 @@ def projects():
         print(e)
         return Response("{'error':'Error occured when getting project.'}", status=500, mimetype='application/json')
 
+
 @app.route('/register', methods=['POST'])
 def register():
-    try: 
+    try:
         address_info = {
             "country": request.json["country"],
             "state": request.json["state"],
@@ -142,7 +145,7 @@ def register():
             "zipCode": int(request.json["zipCode"])
         }
         xaddress = db.add("addresses", address_info)
-        
+
         customer_info = {
             "firstName": request.json["firstName"],
             "lastName": request.json["lastName"],
@@ -157,13 +160,13 @@ def register():
             "projects": []
         }
         xcustomer = db.add("customers", customer_info)
-  
-        if xcustomer: 
+
+        if xcustomer:
             return Response("customer successfully added.", status=200, mimetype='application/json')
     except Exception as e:
         print(e)
         return Response("{'error':'Error occured when registering customer.'}", status=500, mimetype='application/json')
-        
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -181,26 +184,28 @@ def login():
         return Response("{'error':'Error occured when finding customer.'}", status=500, mimetype='application/json')
 
 
-
-
 '''
 *****************************************
 *************  Routes interacting with AI
 *****************************************
 '''
-#modified path of dataset in indexnow 
+# modified path of dataset in indexnow
+
+
 @app.route('/index', methods=['POST'])
 def index():
     try:
-        pathIndex = os.path.join("indexes", request.json["customer_name"], request.json["project_name"], "index.csv")
+        pathIndex = os.path.join(
+            "indexes", request.json["customer_name"], request.json["project_name"], "index.csv")
         reciever = request.json["email"]
         if not os.path.exists(os.path.dirname(pathIndex)):
-                try:
-                    os.makedirs(os.path.dirname(pathIndex))
-                except OSError as exc: # Guard against race condition
-                    if exc.errno != errno.EEXIST:
-                        raise
-        indexNow(request.json["customer_name"], request.json["project_name"], pathIndex)
+            try:
+                os.makedirs(os.path.dirname(pathIndex))
+            except OSError as exc:  # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        indexNow(request.json["customer_name"],
+                 request.json["project_name"], pathIndex)
         sendEmail(reciever, request.json["project_name"])
         return Response("Images indexed successfully.", status=200, mimetype='application/javascript')
     except Exception as e:
@@ -216,35 +221,30 @@ def search():
             base64_img = str(request.json['image']).split(',')[1]
             base64_img_bytes = base64_img.encode('utf-8')
             currentDT = datetime.datetime.now().isoformat()
-            imgname = str(currentDT).replace(":","-").replace(".","_")+".jpg"
-            path = os.path.join("queries", request.json["customer_name"], request.json["project_name"], imgname)
+            imgname = str(currentDT).replace(":", "-").replace(".", "_")+".jpg"
+            path = os.path.join(
+                "queries", request.json["customer_name"], request.json["project_name"], imgname)
             customer_name = request.json["customer_name"]
             project_name = request.json["project_name"]
             if not os.path.exists(os.path.dirname(path)):
                 try:
                     os.makedirs(os.path.dirname(path))
-                except OSError as exc: # Guard against race condition
+                except OSError as exc:  # Guard against race condition
                     if exc.errno != errno.EEXIST:
                         raise
             with open(path, 'wb') as file_to_save:
                 decoded_image_data = base64.decodebytes(base64_img_bytes)
                 file_to_save.write(decoded_image_data)
-                pathIndex = os.path.join("indexes", request.json["customer_name"], request.json["project_name"], "index.csv")
+                pathIndex = os.path.join(
+                    "indexes", request.json["customer_name"], request.json["project_name"], "index.csv")
                 similars = run(path, customer_name, project_name, pathIndex)
                 #uploadQueryImage(customer_name, project_name)
                 return {"similars": similars}
         except Exception as e:
-             print(str(e))
-             return Response("{'error':'Please check the image you sent.'}", status=500, mimetype='application/json')
+            print(str(e))
+            return Response("{'error':'Please check the image you sent.'}", status=500, mimetype='application/json')
     else:
         return Response("{'error':'Please check the image you sent.'}", status=500, mimetype='application/json')
-
-
-
-
-
-
-
 
 
 '''
@@ -253,14 +253,17 @@ def search():
 ***************************************************
 '''
 
+
 def sendEmail(reciever, project_name):
     try:
         msg = MIMEMultipart()
         msg['from'] = "customer.simpy@gmail.com"
         msg['to'] = str(reciever)
         password = os.environ['GMPW']
+        print(password)
         msg['subject'] = "Indexing complete"
-        body = "<p>The image indexing from the project: "+project_name+" is completed successfully.</p>"
+        body = "<p>The image indexing from the project: " + \
+            project_name+" is completed successfully.</p>"
         msg.attach(MIMEText(body, "html"))
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.ehlo()
@@ -276,13 +279,13 @@ def sendEmail(reciever, project_name):
 
 def sendErrorEmail(reciever, project_name):
     try:
-        print(os.environ['GMPW'])
         msg = MIMEMultipart()
         msg['from'] = "customer.simpy@gmail.com"
         msg['to'] = str(reciever)
         password = os.environ['GMPW']
         msg['subject'] = "Indexing problem"
-        body = "<p>It appears to be that the image indexing for the project: "+project_name+" got an error and has not completed.</p><p>We will check that as soon as possible.</p>"
+        body = "<p>It appears to be that the image indexing for the project: "+project_name + \
+            " got an error and has not completed.</p><p>We will check that as soon as possible.</p>"
         msg.attach(MIMEText(body, "html"))
         print(msg)
         server = smtplib.SMTP("smtp.gmail.com", 587)
@@ -297,13 +300,6 @@ def sendErrorEmail(reciever, project_name):
         print(e)
 
 
-
-
-
-
-
-
-
 '''
 *******************************************
 *************  Routes interacting with CRON
@@ -316,13 +312,8 @@ def sendErrorEmail(reciever, project_name):
 @app.route('/start_cron', methods=['POST'])
 def startCron():
     '''
-    
 
 
 '''
 @app.route('/stop_cron', methods=['POST'])
 def stopCron(): '''
-
-
-
-
